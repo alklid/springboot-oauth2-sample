@@ -1,0 +1,87 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<configuration scan="true" scanPeriod="1 seconds">
+ 
+	<property name="LOG_HOME" value="/tmp/logs" />
+ 
+ 	<appender name="STDOUT" class="ch.qos.logback.core.ConsoleAppender">
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}[%method:%line] - %msg%n</pattern>
+		</encoder>
+	</appender>
+	
+	<appender name="ROLLING" class="ch.qos.logback.core.rolling.RollingFileAppender">
+		<file>${LOG_HOME}/manage_api.log</file>
+		<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+			<fileNamePattern>${LOG_HOME}/backup/manage_api-%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+			<maxHistory>15</maxHistory>
+		</rollingPolicy>
+		<encoder>
+			<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}[%method:%line] - %msg%n</pattern>
+		</encoder>
+	</appender>
+ 
+	<appender name="SIFT" class="ch.qos.logback.classic.sift.SiftingAppender">
+		<discriminator>
+			<key>apiKey</key>
+			<defaultValue>unknown</defaultValue>
+		</discriminator>
+
+		<sift>
+			<appender name="FILE-${apiKey}" class="ch.qos.logback.core.FileAppender">
+				<file>${LOG_HOME}/${apiKey}/manage_api.log</file>
+				<append>true</append>
+				<immediateFlush>true</immediateFlush>
+				<rollingPolicy class="ch.qos.logback.core.rolling.TimeBasedRollingPolicy">
+					<fileNamePattern>${LOG_HOME}/${apiKey}/backup/manage_api-%d{yyyy-MM-dd}.log.zip</fileNamePattern>
+					<maxHistory>15</maxHistory>
+				</rollingPolicy>
+				<encoder>
+					<pattern>%d{yyyy-MM-dd HH:mm:ss.SSS} [%thread] %-5level %logger{36}[%method:%line] - %msg%n</pattern>
+				</encoder>
+			</appender>
+		</sift>
+	</appender>
+	
+	<logger name="org.apache.commons" level="OFF" />
+	<logger name="org.springframework" level="OFF" />
+
+	<!-- HTTP -->
+	<logger name="org.apache.http" additivity="true" level="OFF"/>
+	<logger name="org.apache.tomcat" additivity="true" level="OFF"/>
+
+	<!-- DB -->
+	<logger name="org.hibernate.SQL" additivity="true" level="DEBUG"/>
+	<logger name="com.zaxxer.hikari.HikariConfig" additivity="true" level="DEBUG"/>
+	<logger name="org.hibernate.type.descriptor.sql.BasicBinder" additivity="true" level="DEBUG"/>
+
+	<!-- domain.api -->
+	<logger name="com.fasoo.blockchain.domain.api.VersionControl" additivity="true" level="DEBUG">
+		<appender-ref ref="STDOUT" />
+	</logger>
+	<logger name="com.fasoo.blockchain.domain.api.VersionService" additivity="true" level="DEBUG">
+		<appender-ref ref="STDOUT" />
+	</logger>
+
+	<!-- domain.users -->
+	<logger name="com.fasoo.blockchain.domain.users.UserControl" additivity="true" level="DEBUG">
+		<appender-ref ref="STDOUT" />
+	</logger>
+	<logger name="com.fasoo.blockchain.domain.users.UserService" additivity="true" level="DEBUG">
+		<appender-ref ref="STDOUT" />
+	</logger>
+	
+	<!-- domain.transactions -->
+	<logger name="com.fasoo.blockchain.domain.transactions.TransactionControl" additivity="true" level="DEBUG">
+		<appender-ref ref="STDOUT" />
+	</logger>
+	<logger name="com.fasoo.blockchain.domain.transactions.TransactionService" additivity="true" level="DEBUG">
+		<appender-ref ref="STDOUT" />
+	</logger>
+	
+	<root level="DEBUG">
+		<appender-ref ref="STDOUT" />
+		<!--appender-ref ref="ROLLING" /-->
+	</root>
+
+	<jmxConfigurator/>
+</configuration>

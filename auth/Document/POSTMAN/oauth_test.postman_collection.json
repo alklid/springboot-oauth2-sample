@@ -1,0 +1,515 @@
+{
+	"info": {
+		"_postman_id": "92e2284a-5b9b-415e-be28-f242d4c8e1c9",
+		"name": "oauth_test",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+	},
+	"item": [
+		{
+			"name": "oauth2",
+			"item": [
+				{
+					"name": "http://localhost:20000/oauth/token",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "oauth_test_client_secret",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "oauth_test_client_id",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "password",
+									"type": "text"
+								},
+								{
+									"key": "username",
+									"value": "alklid2@sample.com",
+									"type": "text"
+								},
+								{
+									"key": "password",
+									"value": "111111",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:20000/oauth/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20000",
+							"path": [
+								"oauth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:20000/oauth/token - client credentials",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "oauth_test_client_secret",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "oauth_test_client_id",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "client_credentials",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:20000/oauth/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20000",
+							"path": [
+								"oauth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:20000/oauth/token - refresh",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "oauth_test_client_secret",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "oauth_test_client_id",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "grant_type",
+									"value": "refresh_token",
+									"type": "text"
+								},
+								{
+									"key": "refresh_token",
+									"value": "ecc92ee9-df03-44b5-84d1-1cafa037f2d5",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:20000/oauth/token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20000",
+							"path": [
+								"oauth",
+								"token"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:20000/oauth/check_token",
+					"request": {
+						"auth": {
+							"type": "basic",
+							"basic": [
+								{
+									"key": "password",
+									"value": "oauth_test_client_secret",
+									"type": "string"
+								},
+								{
+									"key": "username",
+									"value": "oauth_test_client_id",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/x-www-form-urlencoded"
+							}
+						],
+						"body": {
+							"mode": "urlencoded",
+							"urlencoded": [
+								{
+									"key": "token",
+									"value": "b8ef4b1c-be57-44c1-b778-c5127787c798",
+									"type": "text"
+								}
+							]
+						},
+						"url": {
+							"raw": "http://localhost:20000/oauth/check_token",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20000",
+							"path": [
+								"oauth",
+								"check_token"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "user",
+			"item": [
+				{
+					"name": "http://localhost:20000/api/1.0/users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "b6f395e3-be8b-419d-bfcb-ddc802561d9c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"alklid3@sample.com\",\n  \"name\": \"alklid3\",\n  \"pwd\": \"111111\",\n  \"permissions\": \"UPDATE_USER,DELETE_USER\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:20000/api/1.0/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20000",
+							"path": [
+								"api",
+								"1.0",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:20000/api/1.0/users/{users_email}",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "b8ef4b1c-be57-44c1-b778-c5127787c798",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"alklid2@sample.com\",\n  \"name\": \"alklid2\",\n  \"pwd\": \"111111\",\n  \"permissions\": \"UPDATE_USER,DELETE_USER\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:20000/api/1.0/users/alklid2@sample.com",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20000",
+							"path": [
+								"api",
+								"1.0",
+								"users",
+								"alklid2@sample.com"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:20000/api/1.0/users/{users_sid}",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "b8ef4b1c-be57-44c1-b778-c5127787c798",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"name\": \"alklid22333\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:20000/api/1.0/users/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20000",
+							"path": [
+								"api",
+								"1.0",
+								"users",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:20000/api/1.0/users/{users_sid}",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "ff0d0a94-6cab-40f2-ac2e-e318c95291e6",
+									"type": "string"
+								}
+							]
+						},
+						"method": "DELETE",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:20000/api/1.0/users/6",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20000",
+							"path": [
+								"api",
+								"1.0",
+								"users",
+								"6"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:20000/api/1.0/users",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "b8ef4b1c-be57-44c1-b778-c5127787c798",
+									"type": "string"
+								}
+							]
+						},
+						"method": "GET",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"email\": \"alklid2@sample.com\",\n  \"name\": \"alklid2\",\n  \"pwd\": \"111111\",\n  \"permissions\": \"UPDATE_USER,DELETE_USER\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:20000/api/1.0/users",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20000",
+							"path": [
+								"api",
+								"1.0",
+								"users"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:20000/api/1.0/users/{users_sid}/pwd",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "255f31e4-16c7-40d3-b668-e8b6306e142b",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PUT",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\n  \"pwd\": \"333333\",\n  \"new_pwd\": \"111111\"\n}"
+						},
+						"url": {
+							"raw": "http://localhost:20000/api/1.0/users/6/pwd",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20000",
+							"path": [
+								"api",
+								"1.0",
+								"users",
+								"6",
+								"pwd"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "http://localhost:20000/api/1.0/users/{users_sid}/pwd",
+					"request": {
+						"auth": {
+							"type": "bearer",
+							"bearer": [
+								{
+									"key": "token",
+									"value": "b6f395e3-be8b-419d-bfcb-ddc802561d9c",
+									"type": "string"
+								}
+							]
+						},
+						"method": "PATCH",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": ""
+						},
+						"url": {
+							"raw": "http://localhost:20000/api/1.0/users/6/pwd",
+							"protocol": "http",
+							"host": [
+								"localhost"
+							],
+							"port": "20000",
+							"path": [
+								"api",
+								"1.0",
+								"users",
+								"6",
+								"pwd"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "version",
+			"item": []
+		}
+	]
+}

@@ -3,13 +3,13 @@
 	xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
 	<modelVersion>4.0.0</modelVersion>
 
-	<groupId>com.fasoo.blockchain</groupId>
-	<artifactId>manage_api</artifactId>
+	<groupId>test.oauth</groupId>
+	<artifactId>oauth2</artifactId>
 	<version>D06C1920180813</version>
 	<packaging>jar</packaging>
 
-	<name>manage_api</name>
-	<description>Blockchain API Project</description>
+	<name>oauth2_sample</name>
+	<description>oauth2 sample Project</description>
 
 	<parent>
 		<groupId>org.springframework.boot</groupId>

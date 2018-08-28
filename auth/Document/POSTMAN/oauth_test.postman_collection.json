@@ -259,14 +259,14 @@
 					"response": []
 				},
 				{
-					"name": "http://localhost:20000/api/1.0/users/{users_email}",
+					"name": "http://localhost:20000/api/1.0/users/{users_sid}",
 					"request": {
 						"auth": {
 							"type": "bearer",
 							"bearer": [
 								{
 									"key": "token",
-									"value": "b8ef4b1c-be57-44c1-b778-c5127787c798",
+									"value": "59d22178-c9fe-4da4-b540-aea81ab7f1b3",
 									"type": "string"
 								}
 							]
@@ -283,7 +283,7 @@
 							"raw": "{\n  \"email\": \"alklid2@sample.com\",\n  \"name\": \"alklid2\",\n  \"pwd\": \"111111\",\n  \"permissions\": \"UPDATE_USER,DELETE_USER\"\n}"
 						},
 						"url": {
-							"raw": "http://localhost:20000/api/1.0/users/alklid2@sample.com",
+							"raw": "http://localhost:20000/api/1.0/users/6",
 							"protocol": "http",
 							"host": [
 								"localhost"
@@ -293,7 +293,7 @@
 								"api",
 								"1.0",
 								"users",
-								"alklid2@sample.com"
+								"6"
 							]
 						}
 					},

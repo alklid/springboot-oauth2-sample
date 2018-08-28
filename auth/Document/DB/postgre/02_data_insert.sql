@@ -11,7 +11,7 @@ INSERT INTO users(
   'alklid@sample.com',
   'alklid',
   '$2a$08$6J.nxiOn6T4tCQO0OrcJxOmtmyFaaW0tSbusAZsZi9Q1yWMpUtzqu',
-  'CREATE_USER,READ_USERS,UPDATE_USER,DELETE_USER,RESET_PWD_USER',
+  'MANAGE:USER',
   timezone('utc'::text, now()),
   timezone('utc'::text, now())
 );
@@ -33,7 +33,7 @@ INSERT INTO oauth_client_details(
   'oauth_test_client_id',
   'oauth_test_resources_id',
   '$2a$04$aXWSdqTTmFvQKZ4kVSeVHuGqXApQJqlkwLkuS/NSpil4p1tEa0bnG',
-  'USER',
+  'MANAGE',
   'password,refresh_token,client_credentials',
   'NONE',
   14400,

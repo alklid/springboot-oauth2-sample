@@ -12,24 +12,13 @@
 
 ### #Oauth2
 * scope
-	* USER
+	* MANAGE
 * authorities
-	* CREATE_USER
-	* READ_USERS
-	* UPDATE_USER
-	* DELETE_USER
-	* RESET_PWD_USER
+	* MANAGE:USER
 
 ### #ROLE	
 * if admin
-	* CREATE_USER
-	* READ_USERS
-	* UPDATE_USER
-	* DELETE_USER
-	* RESET_PWD_USER
-* if general
-	* UPDATE_USER
-
+	* MANAGE:USER
 	
 ### #RESTful API
 * /version
@@ -42,28 +31,28 @@
     * method : POST
 	* \{v} : 1.0
 	* oauth
-		- @PreAuthorize("isAuthenticated() and #oauth2.hasScope('USER') and hasAuthority('CREATE_USER')")
+		- @PreAuthorize("isAuthenticated() and #oauth2.hasScope('MANAGE') and hasAuthority('MANAGE:USER')")
     * request JSON schema
 ```json
 {
   "email": "alklid@sample.com",
   "name": "alklid",
   "pwd": "111111",
-  "permissions": "CREATE_USER,READ_USERS,UPDATE_USER,DELETE_USER,RESET_PWD_USER"
+  "permissions": "USER:CREATE,USER:LIST,USER:UPDATE,USER:DELETE,USER:RESET_PWD"
 }		
 ```
-* /api/\{v}/users/\{users_email}
+* /api/\{v}/users/\{users_sid}
     * description : get user
     * method : GET
 	* \{v} : 1.0
 	* oauth
-		- @PreAuthorize("isAuthenticated() and #oauth2.hasScope('USER') and (( #users_email == principal.username ) or hasAuthority('READ_USERS'))")
-* /api/\{v}/users/{users_sid}
+		- @PreAuthorize("isAuthenticated() and #oauth2.hasScope('MANAGE') and (hasAuthority('MANAGE:USER') or @customSecurityPermissionEvaluator.isMe(authentication, #users_sid))")
+* /api/\{v}/users/\{users_sid}
     * description : modify user
     * method : PUT
 	* \{v} : 1.0
 	* oauth
-		- @PreAuthorize("isAuthenticated() and #oauth2.hasScope('USER') and @customSecurityPermissionEvaluator.isMe(authentication, #users_sid) and hasAuthority('UPDATE_USER')")
+		- @PreAuthorize("isAuthenticated() and #oauth2.hasScope('MANAGE') and (hasAuthority('MANAGE:USER') or @customSecurityPermissionEvaluator.isMe(authentication, #users_sid))")
     * request JSON schema
 ```json
 {
@@ -75,19 +64,19 @@
     * method : DELETE
 	* \{v} : 1.0
 	* oauth
-		- @PreAuthorize("isAuthenticated() and #oauth2.hasScope('USER') and @customSecurityPermissionEvaluator.isNotMe(authentication, #users_sid) and hasAuthority('DELETE_USER')")
+		- @PreAuthorize("isAuthenticated() and #oauth2.hasScope('MANAGE') and hasAuthority('MANAGE:USER') and @customSecurityPermissionEvaluator.isNotMe(authentication, #users_sid)")
 * /api/\{v}/users
     * description : list users
     * method : GET
 	* \{v} : 1.0
 	* oauth
-		- @PreAuthorize("isAuthenticated() and #oauth2.hasScope('USER') and hasAuthority('READ_USERS')")
+		- @PreAuthorize("isAuthenticated() and #oauth2.hasScope('MANAGE') and hasAuthority('MANAGE:USER')")
 * /api/\{v}/users/\{users_sid}/pwd
     * description : change users's password
     * method : PUT
 	* \{v} : 1.0
 	* oauth
-		- @PreAuthorize("isAuthenticated() and #oauth2.hasScope('USER') and @customSecurityPermissionEvaluator.isNotMe(authentication, #users_sid) and hasAuthority('DELETE_USER')")		
+		- @PreAuthorize("isAuthenticated() and #oauth2.hasScope('MANAGE') and @customSecurityPermissionEvaluator.isMe(authentication, #users_sid)")		
 ```json
 {
   "pwd": "111111",
@@ -99,4 +88,4 @@
     * method : PATCH
 	* \{v} : 1.0
 	* oauth
-		- @PreAuthorize("isAuthenticated() and #oauth2.hasScope('USER') and hasAuthority('RESET_PWD_USER')")
+		- @PreAuthorize("isAuthenticated() and #oauth2.hasScope('MANAGE') and hasAuthority('MANAGE:USER')")

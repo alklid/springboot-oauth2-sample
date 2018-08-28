@@ -40,7 +40,7 @@ public class UserControl {
     private UserService userService;
 
     // create
-    @PreAuthorize("isAuthenticated() and #oauth2.hasScope('USER') and hasAuthority('CREATE_USER')")
+    @PreAuthorize("isAuthenticated() and #oauth2.hasScope('MANAGE') and hasAuthority('MANAGE:USER')")
     @RequestMapping(method = RequestMethod.POST)
     public ResponseEntity<UserDto.Response> add(HttpServletRequest httpRequest,
     								@PathVariable("v") String v,
@@ -60,7 +60,7 @@ public class UserControl {
     }
 
     // info
-    @PreAuthorize("isAuthenticated() and #oauth2.hasScope('USER') and ( @customSecurityPermissionEvaluator.isMe(authentication, #users_sid) or hasAuthority('READ_USERS'))")
+    @PreAuthorize("isAuthenticated() and #oauth2.hasScope('MANAGE') and (hasAuthority('MANAGE:USER') or @customSecurityPermissionEvaluator.isMe(authentication, #users_sid))")
     @RequestMapping(method = RequestMethod.GET, value = "/{users_sid}")
     public ResponseEntity<UserDto.Response> get(HttpServletRequest httpRequest,
                                   @PathVariable("v") String v,
@@ -75,7 +75,7 @@ public class UserControl {
     }
 
     // update
-    @PreAuthorize("isAuthenticated() and #oauth2.hasScope('USER') and @customSecurityPermissionEvaluator.isMe(authentication, #users_sid) and hasAuthority('UPDATE_USER')")
+    @PreAuthorize("isAuthenticated() and #oauth2.hasScope('MANAGE') and (hasAuthority('MANAGE:USER') or @customSecurityPermissionEvaluator.isMe(authentication, #users_sid))")
     @RequestMapping(method = RequestMethod.PUT, value = "/{users_sid}")
     public ResponseEntity<UserDto.Response> update(HttpServletRequest httpRequest,
                                      @PathVariable("v") String v,
@@ -96,7 +96,7 @@ public class UserControl {
     }
     
     // delete
-    @PreAuthorize("isAuthenticated() and #oauth2.hasScope('USER') and @customSecurityPermissionEvaluator.isNotMe(authentication, #users_sid) and hasAuthority('DELETE_USER')")
+    @PreAuthorize("isAuthenticated() and #oauth2.hasScope('MANAGE') and hasAuthority('MANAGE:USER') and @customSecurityPermissionEvaluator.isNotMe(authentication, #users_sid)")
     @RequestMapping(method = RequestMethod.DELETE, value = "/{users_sid}")
     public ResponseEntity<Void> delete(HttpServletRequest httpRequest,
                                      @PathVariable("v") String v,
@@ -116,7 +116,7 @@ public class UserControl {
     //      [:] ==> equals or like
     //      [<] or [>] ==> numeric
     //      [;] ==> true or false
-    @PreAuthorize("isAuthenticated() and #oauth2.hasScope('USER') and hasAuthority('READ_USERS')")
+    @PreAuthorize("isAuthenticated() and #oauth2.hasScope('MANAGE') and hasAuthority('MANAGE:USER')")
     @RequestMapping(method = RequestMethod.GET)
     public ResponseEntity<PageImpl<UserDto.Response>> search(HttpServletRequest httpRequest,
     								 @AuthenticationPrincipal OAuth2Authentication authentication,
@@ -133,7 +133,7 @@ public class UserControl {
     }
     
     //changePwd
-    @PreAuthorize("isAuthenticated() and #oauth2.hasScope('USER') and @customSecurityPermissionEvaluator.isMe(authentication, #users_sid) and hasAuthority('UPDATE_USER')")
+    @PreAuthorize("isAuthenticated() and #oauth2.hasScope('MANAGE') and @customSecurityPermissionEvaluator.isMe(authentication, #users_sid)")
 	@RequestMapping(method = RequestMethod.PUT, value = "/{users_sid}/pwd")
 	public ResponseEntity<UserDto.Response> changePwd(HttpServletRequest httpRequest,
 									@PathVariable("v") String v,
@@ -156,7 +156,7 @@ public class UserControl {
     }
     
     //resetPwd
-    @PreAuthorize("isAuthenticated() and #oauth2.hasScope('USER') and hasAuthority('RESET_PWD_USER')")
+    @PreAuthorize("isAuthenticated() and #oauth2.hasScope('MANAGE') and hasAuthority('MANAGE:USER')")    
     @RequestMapping(method = RequestMethod.PATCH, value = "/{users_sid}/pwd")
     public ResponseEntity<UserDto.Response> resetPwd(HttpServletRequest httpRequest,
                                   @PathVariable("v") String v,
@@ -211,16 +211,6 @@ public class UserControl {
         return new ResponseEntity<>(errorResultBean, HttpStatus.CONFLICT);
     }
     
-    @ExceptionHandler(UserDefineException.SendEmailFailed.class)
-    public ResponseEntity<ErrorResultBean> SendMailErrorHandler(UserDefineException.SendEmailFailed e) {
-        ErrorResultBean errorResultBean = new ErrorResultBean();
-        errorResultBean.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        errorResultBean.setError("Internal_Server_Error");
-        errorResultBean.setMessage("메일 발송에 실패했습니다.");
-        errorResultBean.setPath(e.getPath());
-        return new ResponseEntity<>(errorResultBean, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-    
     @ExceptionHandler(UserDefineException.UserSidNotMatched.class)
     public ResponseEntity<ErrorResultBean> UserSidNotMatched(UserDefineException.UserSidNotMatched e) {
         ErrorResultBean errorResultBean = new ErrorResultBean();
@@ -231,16 +221,6 @@ public class UserControl {
         return new ResponseEntity<>(errorResultBean, HttpStatus.BAD_REQUEST);
     }
     
-    @ExceptionHandler(UserDefineException.NotFoundActivateToken.class)
-    public ResponseEntity<ErrorResultBean> NotFoundActivateToken(UserDefineException.NotFoundActivateToken e) {
-        ErrorResultBean errorResultBean = new ErrorResultBean();
-        errorResultBean.setStatus(HttpStatus.INTERNAL_SERVER_ERROR.value());
-        errorResultBean.setError("not_found_activate_token");
-        errorResultBean.setMessage("활성화 토큰을 찾을 수 없습니다.");
-        errorResultBean.setPath(e.getPath());
-        return new ResponseEntity<>(errorResultBean, HttpStatus.INTERNAL_SERVER_ERROR);
-    }
-    
     @ExceptionHandler(UserDefineException.UserEmailNotMatched.class)
     public ResponseEntity<ErrorResultBean> UserEmailNotMatched(UserDefineException.UserEmailNotMatched e) {
         ErrorResultBean errorResultBean = new ErrorResultBean();
@@ -249,15 +229,5 @@ public class UserControl {
         errorResultBean.setMessage("사용자 이메일 정보가 일치하지 않습니다.");
         errorResultBean.setPath(e.getPath());
         return new ResponseEntity<>(errorResultBean, HttpStatus.NOT_FOUND);
-    }
-
-    @ExceptionHandler(UserDefineException.AlreadyActivated.class)
-    public ResponseEntity<ErrorResultBean> UserAlreadyActivated(UserDefineException.AlreadyActivated e) {
-        ErrorResultBean errorResultBean = new ErrorResultBean();
-        errorResultBean.setStatus(HttpStatus.PRECONDITION_FAILED.value());
-        errorResultBean.setError("already_activated");
-        errorResultBean.setMessage("이미 활성화된 사용자입니다.[" + e.getUsersSid() + "]");
-        errorResultBean.setPath(e.getPath());
-        return new ResponseEntity<>(errorResultBean, HttpStatus.PRECONDITION_FAILED);
     }
 }
